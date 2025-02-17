@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arabic Transliteration Form</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        input[readonly] {
+            background-color: #e9e9e9;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Arabic Input Form with Transliteration</h2>
+    
+    <form id="translitForm">
+        <label for="firstName">First Name (Arabic):</label>
+        <input type="text" id="firstName" name="firstName" lang="ar" dir="rtl" required>
+        <input type="text" id="firstNameLatin" name="firstNameLatin" placeholder="Transliterated" readonly><br><br>
+
+        <label for="lastName">Last Name (Arabic):</label>
+        <input type="text" id="lastName" name="lastName" lang="ar" dir="rtl" required>
+        <input type="text" id="lastNameLatin" name="lastNameLatin" placeholder="Transliterated" readonly><br><br>
+
+        <label for="address">Address (Arabic):</label>
+        <input type="text" id="address" name="address" lang="ar" dir="rtl" required>
+        <input type="text" id="addressLatin" name="addressLatin" placeholder="Transliterated" readonly><br><br>
+
+        <label for="city">City (Arabic):</label>
+        <input type="text" id="city" name="city" lang="ar" dir="rtl" required>
+        <input type="text" id="cityLatin" name="cityLatin" placeholder="Transliterated" readonly><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        const arabicToLatinMap = {
+            'ا': 'a', 'ب': 'b', 'ت': 't', 'ث': 'th', 'ج': 'j', 'ح': 'h', 'خ': 'kh',
+            'د': 'd', 'ذ': 'dh', 'ر': 'r', 'ز': 'z', 'س': 's', 'ش': 'sh', 'ص': 's',
+            'ض': 'd', 'ط': 't', 'ظ': 'z', 'ع': 'a', 'غ': 'gh', 'ف': 'f', 'ق': 'q',
+            'ك': 'k', 'ل': 'l', 'م': 'm', 'ن': 'n', 'ه': 'h', 'و': 'w', 'ي': 'y',
+            'أ': 'a', 'إ': 'i', 'آ': 'a', 'ؤ': 'w', 'ئ': 'y', 'ى': 'a', 'ة': 'h',
+            'ء': "'", ' ': ' ', '،': ','
+        };
+
+        function transliterateText(inputText) {
+            return inputText.split('').map(char => arabicToLatinMap[char] || char).join('');
+        }
+
+        function handleInput(event) {
+            const inputField = event.target;
+            const translitField = document.getElementById(inputField.id + "Latin");
+
+            if (inputField.value.trim() !== "") {
+                translitField.value = transliterateText(inputField.value);
+            } else {
+                translitField.value = "";
+            }
+        }
+
+        document.getElementById("firstName").addEventListener("input", handleInput);
+        document.getElementById("lastName").addEventListener("input", handleInput);
+        document.getElementById("address").addEventListener("input", handleInput);
+        document.getElementById("city").addEventListener("input", handleInput);
+
+        // Pre-fill form with random Arabic values
+        window.onload = function () {
+            const arabicNames = ["أحمد", "محمد", "علي", "يوسف", "خالد", "إبراهيم", "سعيد", "عمر"];
+            const arabicLastNames = ["السيد", "المصري", "الخطيب", "العنزي", "الهاشمي", "البلوشي", "القحطاني"];
+            const arabicCities = ["القاهرة", "دبي", "بيروت", "الرياض", "دمشق", "بغداد", "الجزائر"];
+            const arabicAddresses = [
+                "شارع النيل، الجيزة", 
+                "طريق الملك فهد، الرياض", 
+                "شارع الشيخ زايد، دبي", 
+                "باب توما، دمشق",
+                "شارع الحمراء، بيروت"
+            ];
+
+            function getRandomItem(arr) {
+                return arr[Math.floor(Math.random() * arr.length)];
+            }
+
+            document.getElementById("firstName").value = getRandomItem(arabicNames);
+            document.getElementById("lastName").value = getRandomItem(arabicLastNames);
+            document.getElementById("address").value = getRandomItem(arabicAddresses);
+            document.getElementById("city").value = getRandomItem(arabicCities);
+
+            // Transliterate pre-filled values
+            document.getElementById("firstNameLatin").value = transliterateText(document.getElementById("firstName").value);
+            document.getElementById("lastNameLatin").value = transliterateText(document.getElementById("lastName").value);
+            document.getElementById("addressLatin").value = transliterateText(document.getElementById("address").value);
+            document.getElementById("cityLatin").value = transliterateText(document.getElementById("city").value);
+        };
+
+        document.getElementById("translitForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            
+            const payload = {
+                firstName: document.getElementById("firstNameLatin").value,
+                lastName: document.getElementById("lastNameLatin").value,
+                address: document.getElementById("addressLatin").value,
+                city: document.getElementById("cityLatin").value
+            };
+
+            const response = await fetch("https://8012757c5954f8b358cd3739981cdebf.m.pipedream.net", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            alert("Form submitted successfully!");
+        });
+    </script>
+
+</body>
+</html>
